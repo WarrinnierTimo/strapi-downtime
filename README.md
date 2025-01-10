@@ -11,20 +11,6 @@ This repository contains a Firebase Cloud Function that periodically checks the 
 
 ---
 
-## **Project Structure**
-```bash
-.
-├── functions/
-│   ├── index.js           # Main Firebase function entry point
-│   ├── alert.js           # Alert function to send email notifications
-│   ├── package.json       # Node.js dependencies
-│   ├── .eslintrc.json     # ESLint configuration (optional)
-│   ├── firebase.json      # Firebase project configuration
-│   └── .gitignore         # Files to ignore in version control
-└── .github/
-    └── workflows/
-        └── firebase-deploy.yml # GitHub Actions workflow for CI/CD
-```
 ## **Setup Instructions**
 1. Clone the repo
 ```bash
