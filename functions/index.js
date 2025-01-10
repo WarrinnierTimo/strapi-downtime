@@ -4,7 +4,7 @@ const logger = require("firebase-functions/logger");
 const axios = require("axios");
 const { sendAlert } = require("./alert");
 
-exports.scheduledFunction = onSchedule("every 5 mins", async (event) => {
+exports.downtimeMeter = onSchedule("every 5 mins", async (event) => {
     try {
         // Replace with your Strapi health check endpoint
         const response = await axios.get('https://a855-2a02-a03f-e02e-e701-a5fc-94bf-e658-1601.ngrok-free.app/api/customers');
