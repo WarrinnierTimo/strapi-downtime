@@ -20,7 +20,6 @@ cd your-repo-name/functions
 
 2. Install dependencies
 ```bash
-Code kopiëren
 npm install
 ```
 
@@ -28,6 +27,5 @@ npm install
 Ensure you have the Firebase CLI installed and configured:
 
 ```bash
-Code kopiëren
 firebase deploy --only functions
 ```
