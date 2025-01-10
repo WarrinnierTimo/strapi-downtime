@@ -1,0 +1,19 @@
+{
+  "name": "fb_heartbeat_downtime",
+  "version": "1.0.0",
+  "description": "",
+  "main": "function.js",
+  "scripts": {
+    "start": "node function.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@genkit-ai/firebase": "^0.9.12",
+    "axios": "^1.7.9",
+    "firebase-admin": "^13.0.2",
+    "firebase-functions": "^6.2.0",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^6.9.16"
+  }
+}
