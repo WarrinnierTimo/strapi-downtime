@@ -35,13 +35,14 @@ jobs:
 
       - name: List Deployed Functions
         run: |
-          firebase functions:list --format json > deployed-functions.json
-          cat deployed-functions.json
+          # Run firebase functions list and capture the output
+          firebase functions:list > deployed-functions.txt
+          cat deployed-functions.txt
 
       - name: Delete Removed Functions
         run: |
-          # Get list of deployed functions
-          DEPLOYED_FUNCTIONS=$(cat deployed-functions.json | jq -r '.[].name')
+          # Get list of deployed functions from the output file
+          DEPLOYED_FUNCTIONS=$(grep -oP '^\S+' deployed-functions.txt)
 
           # Get list of local functions by searching for `exports.` in source code
           LOCAL_FUNCTIONS=$(grep -r "exports\." functions | sed -n 's/exports\.\([a-zA-Z0-9_]*\).*/\1/p')
