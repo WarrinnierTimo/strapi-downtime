@@ -22,15 +22,8 @@ jobs:
       - name: Install Firebase CLI
         run: npm install -g firebase-tools
 
-      - name: Set up Google Cloud Credentials
+      - name: Set up Google Cloud Credentials & Deploy
         run: |
           echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}" > $HOME/credentials.json
           export GOOGLE_APPLICATION_CREDENTIALS=$HOME/credentials.json
-
-      - name: Install Dependencies
-        run: npm install --prefix functions
-
-      - name: Deploy to Firebase
-        run: firebase deploy --only functions
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: $HOME/credentials.json
+          firebase deploy --only functions
