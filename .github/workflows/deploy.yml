@@ -33,10 +33,20 @@ jobs:
       - name: Install Dependencies
         run: npm install --prefix functions
 
+      - name: List Deployed Functions
+        run: |
+          firebase functions:list --format json > deployed-functions.json
+          cat deployed-functions.json
+
       - name: Delete Removed Functions
         run: |
-          DEPLOYED_FUNCTIONS=$(firebase functions:list --format json | jq -r '.[] | .name')
+          # Get list of deployed functions
+          DEPLOYED_FUNCTIONS=$(cat deployed-functions.json | jq -r '.[].name')
+
+          # Get list of local functions by searching for `exports.` in source code
           LOCAL_FUNCTIONS=$(grep -r "exports\." functions | sed -n 's/exports\.\([a-zA-Z0-9_]*\).*/\1/p')
+
+          # Compare deployed functions with local functions and delete any missing ones
           for func in $DEPLOYED_FUNCTIONS; do
             if [[ ! " $LOCAL_FUNCTIONS " =~ " $func " ]]; then
               echo "Deleting function: $func"
@@ -47,4 +57,4 @@ jobs:
       - name: Deploy to Firebase
         env:
           GOOGLE_APPLICATION_CREDENTIALS: $HOME/credentials.json
-        run: firebase deploy --only functions --token ${{ secrets.FIREBASE_TOKEN }}
+        run: firebase deploy --only functions
