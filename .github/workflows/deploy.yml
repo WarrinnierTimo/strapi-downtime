@@ -3,7 +3,7 @@ name: Firebase Functions CI/CD
 on:
   push:
     branches:
-      - main  # Trigger on push to the main branch
+      - main
 
 jobs:
   deploy:
@@ -22,10 +22,29 @@ jobs:
       - name: Install Firebase CLI
         run: npm install -g firebase-tools
 
+      - name: Set up Google Cloud Credentials
+        run: echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}" > $HOME/credentials.json
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+
+      - name: Set GOOGLE_APPLICATION_CREDENTIALS
+        run: export GOOGLE_APPLICATION_CREDENTIALS=$HOME/credentials.json
+
       - name: Install Dependencies
         run: npm install --prefix functions
 
+      - name: Delete Removed Functions
+        run: |
+          DEPLOYED_FUNCTIONS=$(firebase functions:list --format json | jq -r '.[] | .name')
+          LOCAL_FUNCTIONS=$(grep -r "exports\." functions | sed -n 's/exports\.\([a-zA-Z0-9_]*\).*/\1/p')
+          for func in $DEPLOYED_FUNCTIONS; do
+            if [[ ! " $LOCAL_FUNCTIONS " =~ " $func " ]]; then
+              echo "Deleting function: $func"
+              firebase functions:delete $func --force --region us-central1
+            fi
+          done
+
       - name: Deploy to Firebase
         env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          GOOGLE_APPLICATION_CREDENTIALS: $HOME/credentials.json
         run: firebase deploy --only functions
