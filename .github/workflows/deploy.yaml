@@ -1,0 +1,31 @@
+name: Deploy Firebase Functions
+
+on:
+  push:
+    branches:
+      - main  # Change this to your primary branch if different
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18  # Use the same version as your local environment
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: functions  # Adjust this if your functions folder is named differently
+
+      - name: Deploy to Firebase
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}"
+          channelId: live
+          projectId: your-project-id  # Replace with your Firebase project ID
