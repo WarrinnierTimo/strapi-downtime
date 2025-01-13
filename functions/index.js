@@ -12,10 +12,10 @@ exports.downtimeMeter = onSchedule("every 5 mins", async (event) => {
         logger.info('Response', response);
 
         if (response.status === 200) {
-            sendAlert('Strapi is up and running');
+            //sendAlert('Strapi is up and running');
             logger.info('Strapi is up and running');
         } else {
-            sendAlert('Strapi is down');
+            //sendAlert('Strapi is down');
             logger.error('Strapi is down');
             // Optionally, send an alert (e.g., via email or a messaging service)
         }
